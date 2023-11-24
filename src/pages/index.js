@@ -1,5 +1,5 @@
 //
-import Login from "./Login";
+import Recharge from "../components/Recharge";
 // import Register from './Register';
 // import DashboardApp from "./DashboardApp";
 // import UserList from "./Users/UserList";
@@ -7,7 +7,8 @@ import Login from "./Login";
 // import UserPermissions from "./Users/UserPermissions";
 
 const config = [
-  Login,
+  Recharge,
+  // Login,
   // DashboardApp,
   // UserList,
   // UserRole,

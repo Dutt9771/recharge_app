@@ -25,9 +25,9 @@ export default function Router({ isAuthenticated }) {
             key={route.path}
             path={route.path}
             element={
-              <route.layout>
-                <route.component></route.component>
-              </route.layout>
+              // <route.layout>
+              <route.component></route.component>
+              // </route.layout>
             }
           ></Route>
         );

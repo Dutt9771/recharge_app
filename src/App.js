@@ -3,6 +3,7 @@ import "./App.css";
 import ThemeConfig from "./theme";
 import GlobalStyles from "./theme/globalStyles";
 import Router from "./routes";
+
 function App() {
   return (
     <ThemeConfig>
