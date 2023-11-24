@@ -1,24 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { ConfirmProvider } from "material-ui-confirm";
+import "./App.css";
+import ThemeConfig from "./theme";
+import GlobalStyles from "./theme/globalStyles";
+import Router from "./routes";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeConfig>
+      {/* <ScrollToTop /> */}
+      <GlobalStyles />
+      {/* <BaseOptionChartStyle /> */}
+      <ConfirmProvider
+        defaultOptions={{
+          confirmationButtonProps: {
+            variant: "contained",
+            color: "error",
+          },
+          confirmationText: "Yes",
+          cancellationText: "Cancel",
+          cancellationButtonProps: {
+            variant: "contained",
+          },
+        }}
+      >
+        {/* <NiceModal.Provider> */}
+        {/* <Router isAuthenticated={isAuthenticated} /> */}
+        <Router />
+        {/* </NiceModal.Provider> */}
+      </ConfirmProvider>
+      {/* <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        theme="colored"
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        limit={3}
+      /> */}
+    </ThemeConfig>
   );
 }
 

@@ -1,0 +1,243 @@
+.badge {
+  background-color: #ff7f00;
+  color: aqua;
+}
+.employee .warning {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  padding: 10px 15px;
+}
+.employee .warning img {
+  margin-right: 10px;
+}
+.employee .warning strong,
+.employee .warning p {
+  margin-right: 5px;
+}
+.employee .leads_img h3 {
+  color: #000;
+}
+.employee .leads_img {
+  margin-right: 20px;
+}
+.employee .white-card {
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+.pedremove{
+  padding-top:0px !important;
+}
+.employee .interview_item {
+  padding: 20px 20px 20px;
+  border-bottom: 1px solid #e8e8e8;
+}
+.employee .interview_item .interview_top,
+.employee .interview_item .interview_middle {
+  display: flex;
+  justify-content: space-between;
+}
+.employee .interview_item .interview_top h5 {
+  color: #ff7f00;
+  font-size: 14px;
+  font-weight: 600;
+}
+.employee .interview_item span {
+  color: #808080;
+  font-size: 12px;
+  font-weight: 500;
+}
+.employee .interview_item .interview_call {
+  display: flex;
+  align-items: center;
+  background-color: #ffebd8;
+  color: #ff7f00;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  margin-left: 10px;
+}
+.employee .interview_item .interview_call img {
+  margin-right: 10px;
+}
+.employee .interview_item .interview_bottom a {
+  color: #000;
+  font-weight: 400;
+  font-size: 12px;
+  transition: all 0.5s ease;
+  margin-left: 20px;
+}
+#demo-select-small {
+  padding: 5px 10px;
+  font-size: 13px;
+}
+.menu-item-blk {
+  font-size: 13px;
+}
+.menu-item-blk.Mui-selected {
+  background-color: #f6f7f8 !important;
+}
+.employee .interview_item .interview_bottom a:hover {
+  color: #ff7f00;
+}
+.employee .interview_item .interview_bottom {
+  display: flex;
+  align-items: center;
+}
+.employee .interview_item .mail-display-block {
+  margin-bottom: 0 !important;
+}
+.employee .interview_item .mail-dropdown-div {
+  width: 140px !important;
+}
+.employee .interview_item .mail-display-block {
+  padding: 2px 10px 2px !important;
+  border: 1px solid rgb(0 0 0 / 30%) !important;
+}
+.employee .interview_item strong {
+  font-weight: 600;
+  font-size: 12px;
+}
+.employee .interview_middle a {
+  color: #808080;
+  font-weight: 500;
+  font-size: 12px;
+  text-decoration: none;
+}
+.employee .interview_middle img {
+  margin-right: 5px;
+}
+.employee .interview_item .interview_middle {
+  margin-bottom: 11px;
+}
+.employee .interview_item .social-image-icon img {
+  margin-left: 5px;
+  margin-bottom: 0;
+}
+.employee .interview_item .social-image-icon {
+  display: flex;
+  align-items: center;
+}
+.employee .interview_item .mail-dropdown-list {
+  top: 31px !important;
+}
+.employee .calander {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+}
+.employee .calander .fc-daygrid-day-top {
+  display: block;
+}
+.employee .calander .fc-scrollgrid-section-header th {
+  padding: 5px 20px !important;
+}
+.employee .calander .fc-daygrid-event-harness {
+  line-height: 12px !important;
+}
+.employee .calander .fc-scrollgrid-sync-table {
+  height: 430px !important;
+}
+.employee .calander .fc-view-harness {
+  height: 490px !important;
+}
+.fc-scrollgrid-sync-table {
+  height: auto;
+}
+.fc-event-main i {
+  font-size: 11px;
+  text-align: center;
+}
+.fc-event-main {
+  text-align: center;
+}
+.employee .news {
+  padding: 20px 15px 20px 20px;
+}
+.fc-daygrid-day {
+  padding: 0 8px 0 8px !important;
+}
+.fc-daygrid-event:hover {
+  background-color: initial !important;
+}
+.employee .news h4 {
+  font-weight: 600;
+  font-size: 16px;
+}
+.fc-popover {
+  max-height: 139px;
+  overflow: auto;
+  overflow-y: initial !important;
+}
+.fc-daygrid-day-bottom {
+  padding: 0 !important;
+}
+.fc-daygrid-more-link {
+  font-size: 10px;
+  background-color: #ebebeb;
+  border-radius: 5px;
+  padding: 2px 4px;
+}
+.employee .news .news_item {
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+.employee .news .news_item img {
+  margin-right: 15px;
+}
+.employee .news .news_item span {
+  font-weight: 400;
+  font-size: 12px;
+}
+.employee .news .news_item p {
+  font-weight: 600;
+  font-size: 12px;
+}
+.employee .news .span-flex {
+  display: flex;
+  margin-bottom: 3px;
+  margin-left: 35px;
+}
+.employee .news .span-flex span {
+  display: block;
+  margin-bottom: 3px;
+  width: 70%;
+  word-break: break-word;
+}
+.employee .news .span-p {
+  display: block !important;
+}
+.employee .news .news_item:last-child {
+  border-bottom: 0;
+}
+.employee .calander button {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: initial !important;
+  padding: 0 !important;
+  margin: 0 20px;
+}
+.employee .calander .fc .fc-toolbar {
+  justify-content: center;
+}
+.employee .calander .fc-toolbar-title {
+  font-weight: 700;
+  font-size: 16px;
+}
+.employee .fc-header-toolbar {
+  position: relative;
+}
+.fc-scroller {
+  display: initial !important;
+}
+.employee .fc-myNextCustomButton-button {
+  margin-left: 30px;
+}
+.employee .fc-myPrevCustomButton-button {
+  margin-right: 30px;
+}
