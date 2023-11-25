@@ -1,13 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Card, Grid, Typography } from "@mui/material";
 import "./CoupenCode.css";
-import { getCoupenCode } from "../redux/couponCode/couponCodethunk";
-import { useDispatch } from "react-redux";
+import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 function CouponCode({ handleNext, activeStep, steps }) {
-  const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getCoupenCode({})).unwrap();
-  // }, []);
+  const [coupenCodeArr, setCoupenCodeArr] = useState([]);
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+      },
+    };
+
+    fetch(
+      "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/coupons",
+      options
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        setCoupenCodeArr(response?.data?.length > 0 ? response?.data : []);
+      })
+      .catch((err) => console.error(err));
+  }, []);
   const cardArr = [
     {
       title: "100",
@@ -52,24 +69,44 @@ function CouponCode({ handleNext, activeStep, steps }) {
         justifyContent="center"
       > */}
       <div className="custom-container-productlist">
-        {cardArr?.map((item, index) => (
-          //   <Grid item xs={4} sm={4} md={3} lg={2}>
-          <div className={`custom-card-productlist`} key={index}>
-            <Card>
-              <img
-                src="/assets/images/coin.png"
-                alt=""
-                style={{ width: "45px" }}
-              />
-              <Typography sx={{ mt: 2, mb: 1 }}>{item?.title}</Typography>
-              <Typography sx={{ mt: 2, mb: 1 }}>{item?.amount}</Typography>
-              <Button onClick={handleNext} class="button-75" role="button">
-                <span class="text">Apply</span>
-              </Button>
-            </Card>
-          </div>
-          //   </Grid>
-        ))}
+        {coupenCodeArr?.length > 0 &&
+          coupenCodeArr?.map((item, index) => (
+            //   <Grid item xs={4} sm={4} md={3} lg={2}>
+            <div className={`custom-card-productlist`} key={index}>
+              <Card>
+                <img
+                  src="/assets/images/coin.png"
+                  alt=""
+                  style={{
+                    width: "45px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                />
+                <Typography
+                  sx={{ mt: 2, mb: 1 }}
+                  style={{ textAlign: "center" }}
+                >
+                  {item?.data?.name}
+                </Typography>
+                <Typography
+                  sx={{ mt: 2, mb: 1 }}
+                  style={{ textAlign: "center" }}
+                >
+                  <CurrencyRupeeRoundedIcon />
+                  {item?.data?.price}
+                </Typography>
+                <Button
+                  onClick={handleNext}
+                  className="button-75"
+                  role="button"
+                >
+                  <span className="text">Apply</span>
+                </Button>
+              </Card>
+            </div>
+            //   </Grid>
+          ))}
       </div>
       {/* </Grid> */}
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
