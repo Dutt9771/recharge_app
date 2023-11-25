@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, Card, Grid, Typography } from "@mui/material";
 import "./CoupenCode.css";
+import { getCoupenCode } from "../redux/couponCode/couponCodethunk";
+import { useDispatch } from "react-redux";
 function CouponCode({ handleNext, activeStep, steps }) {
+  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(getCoupenCode({})).unwrap();
+  // }, []);
   const cardArr = [
     {
       title: "100",
@@ -34,6 +40,7 @@ function CouponCode({ handleNext, activeStep, steps }) {
       amount: "500",
     },
   ];
+
   return (
     <div>
       <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
