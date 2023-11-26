@@ -20,7 +20,13 @@ import { Flag } from "@mui/icons-material";
 import RechargeSchema from "../validations/Recharge";
 import { toast } from "react-toastify";
 
-function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
+function EmailForm({
+  handleNext,
+  activeStep,
+  steps,
+  setActiveStep,
+  setMobileNumber,
+}) {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   // const isMediumScreen = useMediaQuery((theme) =>
   //   theme.breakpoints.between("sm", "md")
@@ -49,6 +55,7 @@ function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
     },
     validationSchema: RechargeSchema,
     onSubmit: (values) => {
+      
       const options = {
         method: "POST",
         headers: {
@@ -68,6 +75,11 @@ function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
         .then((response) => response.json())
         .then((response) => {
           if (response && response?.data && response?.success) {
+            setMobileNumber(
+              values.code && values?.mobileNumber
+                ? `${values?.code}${values?.mobileNumber}`
+                : ""
+            );
             localStorage.setItem("td", JSON.stringify(response?.data?.id));
             localStorage.setItem(
               "rt",

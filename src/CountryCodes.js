@@ -759,11 +759,11 @@ export const CountryCodes = [
 "dial_code": "+31",
 "code": "NL"
 },
-{
-"name": "Netherlands Antilles",
-"dial_code": "+599",
-"code": "AN"
-},
+// {
+// "name": "Netherlands Antilles",
+// "dial_code": "+599",
+// "code": "AN"
+// },
 {
 "name": "New Caledonia",
 "dial_code": "+687",

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Card, Grid, Typography } from "@mui/material";
 import "./CoupenCode.css";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
-function CouponCode({ handleNext, activeStep, steps }) {
+function CouponCode({ handleNext, activeStep, steps, setCouponCode }) {
   const [coupenCodeArr, setCoupenCodeArr] = useState([]);
+  const [isAppliedId, setIsAppliedId] = useState("");
+
   useEffect(() => {
     const options = {
       method: "GET",
@@ -57,10 +59,16 @@ function CouponCode({ handleNext, activeStep, steps }) {
       amount: "500",
     },
   ];
+  const apply = (item) => {
+    setIsAppliedId(item?.id ? item?.id : "");
+    console.log("item: ", item);
+    setCouponCode(item?.data?.price ? item?.data?.price : "");
+    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
 
   return (
     <div>
-      <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+      {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
       {/* <Grid
         container
         spacing={{ xs: 2, md: 3 }}
@@ -73,7 +81,7 @@ function CouponCode({ handleNext, activeStep, steps }) {
           coupenCodeArr?.map((item, index) => (
             //   <Grid item xs={4} sm={4} md={3} lg={2}>
             <div className={`custom-card-productlist`} key={index}>
-              <Card>
+              <Card style={{ padding: "20px" }}>
                 <img
                   src="/assets/images/coin.png"
                   alt=""
@@ -91,18 +99,33 @@ function CouponCode({ handleNext, activeStep, steps }) {
                 </Typography>
                 <Typography
                   sx={{ mt: 2, mb: 1 }}
-                  style={{ textAlign: "center" }}
+                  style={{
+                    textAlign: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
                 >
-                  <CurrencyRupeeRoundedIcon />
-                  {item?.data?.price}
+                  <CurrencyRupeeRoundedIcon
+                    style={{ height: "17px", width: "auto" }}
+                  />
+                  <span>{item?.data?.price}</span>
                 </Typography>
                 <Button
-                  onClick={handleNext}
+                  onClick={() => apply(item)}
                   className="button-75"
                   role="button"
-                  style={{marginLeft:"auto",marginRight:"auto"}}
+                  style={{
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    color: "white",
+                    opacity: isAppliedId == item?.id ? "0.6" : "1.0",
+                  }}
+                  disabled={isAppliedId == item?.id}
                 >
-                  <span className="text">Apply</span>
+                  <span className="text" style={{ color: "white" }}>
+                    {isAppliedId == item?.id ? "Applied" : "Apply"}
+                  </span>
                 </Button>
               </Card>
             </div>

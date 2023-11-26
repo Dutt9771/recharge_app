@@ -19,7 +19,6 @@ import CouponCode from "./CoupenCode";
 import EmailForm from "./EmailForm";
 import PaymentOption from "./PaymentOption";
 import Header from "./Header";
-const steps = ["Coupon Code", "Email/User ID", "Payment option"];
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -88,6 +87,13 @@ function ColorlibStepIcon(props) {
 
 function Recharge() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [couponCode, setCouponCode] = React.useState("");
+  const [mobileNumber, setMobileNumber] = React.useState("");
+  const steps = [
+    `Coupon Code${couponCode ? " ( ₹" + couponCode + ")" : ""}`,
+    "Mobile Number",
+    "Payment",
+  ];
   const handleNext = () => {
     // let newSkipped = skipped;
     // if (isStepSkipped(activeStep)) {
@@ -118,6 +124,7 @@ function Recharge() {
         {activeStep == 0 && (
           <CouponCode
             handleNext={handleNext}
+            setCouponCode={setCouponCode}
             activeStep={activeStep}
             steps={steps}
           />
@@ -127,6 +134,7 @@ function Recharge() {
             handleNext={handleNext}
             activeStep={activeStep}
             setActiveStep={setActiveStep}
+            setMobileNumber={setMobileNumber}
             steps={steps}
           />
         )}

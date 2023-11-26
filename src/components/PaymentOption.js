@@ -9,7 +9,7 @@ function PaymentOption({ handleNext, activeStep, steps, setActiveStep }) {
   function generateRandomText() {
     const randomDigits = Math.floor(Math.random() * 1000000000); // Generate a random 9-digit number
     const randomText = `TX${randomDigits}`;
-    console.log('randomText: ', randomText);
+    console.log("randomText: ", randomText);
     return randomText;
   }
 
@@ -42,12 +42,18 @@ function PaymentOption({ handleNext, activeStep, steps, setActiveStep }) {
       .then((response) => response.json())
       .then((response) => {
         console.log("response: ", response);
-        window.open(
-          response?.message?.data?.instrumentResponse?.redirectInfo?.url
-        );
-        if (response && response?.data) {
-          localStorage.setItem("td", JSON.stringify(response?.data?.))
-          localStorage.setItem("mi", JSON.stringify(response?.data?.))
+        if (response) {
+          localStorage.setItem(
+            "td",
+            JSON.stringify(response?.message?.data?.merchantId)
+          );
+          localStorage.setItem(
+            "mi",
+            JSON.stringify(response?.message?.data?.merchantId)
+          );
+          window.open(
+            response?.message?.data?.instrumentResponse?.redirectInfo?.url
+          );
         }
       })
       .catch((err) => console.error(err));
