@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Card, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Grid,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import "./CoupenCode.css";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 function CouponCode({ handleNext, activeStep, steps, setCouponCode }) {
   const [coupenCodeArr, setCoupenCodeArr] = useState([]);
   const [isAppliedId, setIsAppliedId] = useState("");
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const options = {
@@ -132,29 +141,24 @@ function CouponCode({ handleNext, activeStep, steps, setCouponCode }) {
             //   </Grid>
           ))}
       </div>
-      {/* </Grid> */}
-      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-        {/* <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button> */}
-        <Box sx={{ flex: "1 1 auto" }} />
-        {/* {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )} */}
-
-        <Button onClick={handleNext} class="button-75" role="button">
+      <Container maxWidth={isSmallScreen ? "xs" : "lg"}>
+        <Button
+          onClick={handleNext}
+          class="button-75"
+          role="button"
+          style={{
+            marginLeft: "auto",
+            marginTop: "15px",
+            opacity: isAppliedId == "" ? "0.6" : "",
+            pointerEvents: isAppliedId == "" ? "none" : "auto",
+          }}
+        >
           <span class="text">
             {activeStep === steps.length - 1 ? "Finish" : "Next"}
           </span>
         </Button>
-      </Box>
+      </Container>
+      {/* </Grid> */}
     </div>
   );
 }

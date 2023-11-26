@@ -91,7 +91,7 @@ function Recharge() {
   const [mobileNumber, setMobileNumber] = React.useState("");
   const steps = [
     `Coupon Code${couponCode ? " ( ₹" + couponCode + ")" : ""}`,
-    "Mobile Number",
+    `Mobile Number${mobileNumber ? " (" + mobileNumber + ")" : ""}`,
     "Payment",
   ];
   const handleNext = () => {
