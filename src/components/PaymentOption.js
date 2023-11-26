@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Card, Typography } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Typography } from "@mui/material";
 import "./PaymentOption.css";
-function PaymentOption({ handleNext, activeStep, steps, setActiveStep }) {
+import { LoadingButton } from "@mui/lab";
+function PaymentOption({
+  handleNext,
+  activeStep,
+  steps,
+  setActiveStep,
+  couponCode,
+  isSubmitting,
+  loading,
+  setLoading,
+}) {
   const [authToken, setAuthToken] = useState("");
   const [amount, setAmount] = useState(0);
   const [transactionId, setTransactionId] = useState("");
@@ -20,6 +30,7 @@ function PaymentOption({ handleNext, activeStep, steps, setActiveStep }) {
     setRestricted(JSON.parse(localStorage.getItem("rt")));
   }, []);
   const Pay = () => {
+    setLoading(true);
     const options = {
       method: "POST",
       headers: {
@@ -30,8 +41,8 @@ function PaymentOption({ handleNext, activeStep, steps, setActiveStep }) {
       },
       body: JSON.stringify({
         transactionId: generateRandomText(),
-        // amount: amount ? amount * 100 : 0,
-        amount: 100,
+        amount: couponCode ? couponCode * 100 : 0,
+        // amount: 100,
       }),
     };
 
@@ -51,6 +62,7 @@ function PaymentOption({ handleNext, activeStep, steps, setActiveStep }) {
             "mi",
             JSON.stringify(response?.message?.data?.merchantId)
           );
+          setLoading(false);
           window.open(
             response?.message?.data?.instrumentResponse?.redirectInfo?.url
           );
@@ -92,13 +104,32 @@ function PaymentOption({ handleNext, activeStep, steps, setActiveStep }) {
           >
             Pay via PhonePay
           </Typography>
+          <Typography
+            sx={{ mt: 2, mb: 1 }}
+            style={{
+              textAlign: "center",
+              color: "white",
+              marginTop: "15px",
+              marginBottom: "15px",
+              fontSize:"18px"
+            }}
+          >
+            {couponCode ? "₹ " + couponCode : ""}
+          </Typography>
           <Button
             onClick={Pay}
             className="button-75"
             role="button"
             style={{ marginLeft: "auto", marginRight: "auto" }}
           >
-            <span className="text">Pay</span>
+            <span className="text">
+              {!loading ? "Pay" : ""}
+              {loading ? (
+                <CircularProgress size={16} style={{ color: "white" }} />
+              ) : (
+                ""
+              )}
+            </span>
           </Button>
         </Card>
       </div>

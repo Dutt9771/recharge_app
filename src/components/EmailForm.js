@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   Container,
   FormControl,
   Grid,
@@ -26,6 +27,8 @@ function EmailForm({
   steps,
   setActiveStep,
   setMobileNumber,
+  loading,
+  setLoading,
 }) {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   // const isMediumScreen = useMediaQuery((theme) =>
@@ -55,7 +58,7 @@ function EmailForm({
     },
     validationSchema: RechargeSchema,
     onSubmit: (values) => {
-      
+      setLoading(true);
       const options = {
         method: "POST",
         headers: {
@@ -94,6 +97,7 @@ function EmailForm({
               JSON.stringify(response?.data?.authToken)
             );
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setLoading(false);
           } else {
             // toast.error()
           }
@@ -237,11 +241,16 @@ function EmailForm({
             <Grid item xs={4} sm={1} md={2}>
               <Button
                 type="submit"
-                class="button-75"
+                class="button-buy-now"
                 role="button"
                 sx={{ width: "100%", height: "100%" }}
               >
-                Buy Now
+                {!loading ? "Buy Now" : ""}
+                {loading ? (
+                  <CircularProgress size={16} style={{ color: "white" }} />
+                ) : (
+                  ""
+                )}
               </Button>
             </Grid>
           </Grid>

@@ -14,6 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
 import PaymentRoundedIcon from "@mui/icons-material/PaymentRounded";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import CallRoundedIcon from "@mui/icons-material/CallRounded";
 import CoupenCode from "./CoupenCode";
 import CouponCode from "./CoupenCode";
 import EmailForm from "./EmailForm";
@@ -71,7 +72,7 @@ function ColorlibStepIcon(props) {
 
   const icons = {
     1: <LocalOfferRoundedIcon />,
-    2: <EmailRoundedIcon />,
+    2: <CallRoundedIcon />,
     3: <PaymentRoundedIcon />,
   };
 
@@ -89,10 +90,11 @@ function Recharge() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [couponCode, setCouponCode] = React.useState("");
   const [mobileNumber, setMobileNumber] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const steps = [
     `Coupon Code${couponCode ? " ( ₹" + couponCode + ")" : ""}`,
     `Mobile Number${mobileNumber ? " (" + mobileNumber + ")" : ""}`,
-    "Payment",
+    `Payment${couponCode ? " ( ₹" + couponCode + ")" : ""}`,
   ];
   const handleNext = () => {
     // let newSkipped = skipped;
@@ -135,6 +137,8 @@ function Recharge() {
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             setMobileNumber={setMobileNumber}
+            setLoading={setLoading}
+            loading={loading}
             steps={steps}
           />
         )}
@@ -142,6 +146,9 @@ function Recharge() {
           <PaymentOption
             handleNext={handleNext}
             activeStep={activeStep}
+            couponCode={couponCode}
+            setLoading={setLoading}
+            loading={loading}
             setActiveStep={setActiveStep}
             steps={steps}
           />
