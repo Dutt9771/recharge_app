@@ -126,6 +126,7 @@ function Recharge() {
           <EmailForm
             handleNext={handleNext}
             activeStep={activeStep}
+            setActiveStep={setActiveStep}
             steps={steps}
           />
         )}

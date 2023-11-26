@@ -1,44 +1,78 @@
 import React, { useState } from "react";
 import {
+  Autocomplete,
   Box,
   Button,
+  Container,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import "./EmailForm.css";
 import { useFormik } from "formik";
 import { CountryCodes } from "../CountryCodes";
 import { Flag } from "@mui/icons-material";
+import RechargeSchema from "../validations/Recharge";
 
-function EmailForm({ handleNext, activeStep, steps }) {
+function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  // const isMediumScreen = useMediaQuery((theme) =>
+  //   theme.breakpoints.between("sm", "md")
+  // );
+  // const isLargeScreen = useMediaQuery((theme) =>
+  //   theme.breakpoints.between("md", "lg")
+  // );
+  // const isExtraLargeScreen = useMediaQuery((theme) =>
+  //   theme.breakpoints.up("lg")
+  // );
   const [isdCode, setIsdCode] = useState(CountryCodes);
-  const { handleBlur, handleChange, errors, values } = useFormik({
-    initialValues: {
-      code: "",
-      mobileNumber: "",
-    },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
-  const [selectedCountry, setSelectedCountry] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [transactionId, setTransactionId] = useState("");
+  const { handleBlur, handleChange, touched, errors, values, handleSubmit } =
+    useFormik({
+      initialValues: {
+        code: "",
+        mobileNumber: "",
+      },
+      validationSchema: RechargeSchema,
+      onSubmit: (values) => {
+        alert(JSON.stringify(values, null, 2));
+      },
+    });
 
-  const handleCountryChange = (event) => {
-    setSelectedCountry(event.target.value);
+  const buyNow = () => {
+    console.log("values: ", values);
+    console.log("errors: ", errors);
+    // const options = {
+    //   method: "POST",
+    //   headers: {
+    //     accept: "application/json",
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Access-Control-Allow-Methods": "*",
+    //     phoneNumber: values?.mobileNumber ? values?.mobileNumber : "",
+    //     isd_code: values?.code ? values?.code?.split("+")?.[1] : "",
+    //   },
+    // };
+
+    // fetch(
+    //   "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/users/verify",
+    //   options
+    // )
+    //   .then((response) => response.json())
+    //   .then((response) => console.log(response))
+    //   .catch((err) => console.error(err));
+    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const countries = [
-    { code: "+1", label: "United States", flag: "US" },
-    { code: "+44", label: "United Kingdom", flag: "GB" },
-    // Add more countries as needed
-  ];
   return (
     <div>
-      <FormControl fullWidth>
+      {/* <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Code</InputLabel>
         <div className="code-field">
           <img src="" alt="" className="code-img" />
@@ -54,45 +88,125 @@ function EmailForm({ handleNext, activeStep, steps }) {
             <MenuItem value={30}>+69</MenuItem>
           </Select>
         </div>
-        <TextField
-          id="outlined-number"
-          label="Mobile Number"
-          type="mobileNumber"
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-      </FormControl>
-      <FormControl>
-        <Select value={selectedCountry} onChange={handleCountryChange}>
-          {countries.map((country) => (
+      </FormControl> */}
+      <Container maxWidth={isSmallScreen ? "xs" : "md"}>
+        <form onSubmit={handleSubmit}>
+          {/* <Select value={selectedCountry} onChange={handleChange} name="code">
+          <div class="search-field">
+            <img
+              src="/assets/images/icons/search-icon.png"
+              alt=""
+              class="serach-img"
+            />
+            <input
+              class="search-input"
+              type="text"
+              onInput={(e) => filter(e)}
+              placeholder="Search"
+              style={{ width: "100%", lineHeight: "24px" }}
+            />
+          </div>
+          {isdCode.map((country) => (
             <MenuItem key={country.code} value={country.code}>
-              <Flag className="country-flag" countryCode={country.flag} svg />
-              {`${country.label} (${country.code})`}
+              <div style={{ display: "flex" }}>
+                <img
+                  alt="United States"
+                  src={
+                    "http://purecatamphetamine.github.io/country-flag-icons/3x2/" +
+                    country.code +
+                    ".svg"
+                  }
+                  style={{ width: "35px", marginRight: "15px" }}
+                />
+                {`(${country.dial_code})`}
+              </div>
             </MenuItem>
           ))}
-        </Select>
-      </FormControl>
-      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-        {/* <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button> */}
-        <Box sx={{ flex: "1 1 auto" }} />
-        {/* {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
+        </Select> */}
+          <Grid
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+            style={{
+              marginTop: "10px",
+              marginBottom: "10px",
+              marginLeft: "-14px",
+            }}
+          >
+            <Grid item xs={4} sm={2} md={3}>
+              <Autocomplete
+                id="country-select-demo"
+                name="code"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                sx={{ width: "100%" }}
+                options={isdCode}
+                autoHighlight
+                getOptionLabel={(option) => option.dial_code}
+                renderOption={(props, option) => (
+                  <Box
+                    component="li"
+                    sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                    {...props}
+                  >
+                    <div style={{ display: "flex" }}>
+                      {/* <Flag className="country-flag" countryCode={country.flag} svg /> */}
+                      <img
+                        alt="United States"
+                        src={
+                          "http://purecatamphetamine.github.io/country-flag-icons/3x2/" +
+                          option.code +
+                          ".svg"
+                        }
+                        style={{ width: "35px", marginRight: "15px" }}
+                      />
+                      {/* {`${option.name} (${option.dial_code})`} */}
+                      {`(${option.dial_code})`}
+                    </div>
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="code"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    label="Country Code"
+                    inputProps={{
+                      ...params.inputProps, // disable autocomplete and autofill
+                      autoComplete: "new-password",
+                    }}
+                    // error={Boolean(errors.code)}
+                    // helperText={errors.code}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={4} sm={5} md={7}>
+              <TextField
+                id="outlined-number"
+                label="Mobile Number"
+                name="mobileNumber"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                sx={{ width: "100%" }}
+                error={Boolean(errors.mobileNumber && touched.mobileNumber)}
+                helperText={touched.mobileNumber && errors.mobileNumber}
+              />
+            </Grid>
+            <Grid item xs={4} sm={1} md={2}>
+              <Button
+                onClick={buyNow}
+                class="button-75"
+                role="button"
+                sx={{ width: "100%", height: "100%" }}
+              >
+                Buy Now
               </Button>
-            )} */}
-
-        <Button onClick={handleNext}>
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
-        </Button>
-      </Box>
+            </Grid>
+          </Grid>
+        </form>
+      </Container>
     </div>
   );
 }
