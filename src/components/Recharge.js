@@ -134,6 +134,7 @@ function Recharge() {
           <PaymentOption
             handleNext={handleNext}
             activeStep={activeStep}
+            setActiveStep={setActiveStep}
             steps={steps}
           />
         )}

@@ -100,6 +100,7 @@ function CouponCode({ handleNext, activeStep, steps }) {
                   onClick={handleNext}
                   className="button-75"
                   role="button"
+                  style={{marginLeft:"auto",marginRight:"auto"}}
                 >
                   <span className="text">Apply</span>
                 </Button>

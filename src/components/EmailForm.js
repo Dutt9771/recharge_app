@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import { CountryCodes } from "../CountryCodes";
 import { Flag } from "@mui/icons-material";
 import RechargeSchema from "../validations/Recharge";
+import { toast } from "react-toastify";
 
 function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -33,41 +34,64 @@ function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
   const [isdCode, setIsdCode] = useState(CountryCodes);
   const [amount, setAmount] = useState(0);
   const [transactionId, setTransactionId] = useState("");
-  const { handleBlur, handleChange, touched, errors, values, handleSubmit } =
-    useFormik({
-      initialValues: {
-        code: "",
-        mobileNumber: "",
-      },
-      validationSchema: RechargeSchema,
-      onSubmit: (values) => {
-        alert(JSON.stringify(values, null, 2));
-      },
-    });
+  const {
+    handleBlur,
+    handleChange,
+    touched,
+    errors,
+    values,
+    setFieldValue,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      code: "",
+      mobileNumber: "",
+    },
+    validationSchema: RechargeSchema,
+    onSubmit: (values) => {
+      const options = {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          phoneNumber: values?.mobileNumber ? values?.mobileNumber : "",
+          isd_code: values?.code ? values?.code?.split("+")?.[1] : "",
+        },
+      };
 
-  const buyNow = () => {
-    console.log("values: ", values);
-    console.log("errors: ", errors);
-    // const options = {
-    //   method: "POST",
-    //   headers: {
-    //     accept: "application/json",
-    //     "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Access-Control-Allow-Methods": "*",
-    //     phoneNumber: values?.mobileNumber ? values?.mobileNumber : "",
-    //     isd_code: values?.code ? values?.code?.split("+")?.[1] : "",
-    //   },
-    // };
-
-    // fetch(
-    //   "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/users/verify",
-    //   options
-    // )
-    //   .then((response) => response.json())
-    //   .then((response) => console.log(response))
-    //   .catch((err) => console.error(err));
-    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      fetch(
+        "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/users/verify",
+        options
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          if (response && response?.data && response?.success) {
+            localStorage.setItem("td", JSON.stringify(response?.data?.id));
+            localStorage.setItem(
+              "rt",
+              JSON.stringify(response?.data?.data?.restricted)
+            );
+            localStorage.setItem(
+              "am",
+              JSON.stringify(response?.data?.data?.wallet?.amount)
+            );
+            localStorage.setItem(
+              "at",
+              JSON.stringify(response?.data?.authToken)
+            );
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          } else {
+            // toast.error()
+          }
+        })
+        .catch((err) => console.error(err));
+    },
+  });
+  const handleAutocompleteChange = (_, value) => {
+    // Manually set the Formik form state
+    setFieldValue("code", value ? value.dial_code : "");
   };
 
   return (
@@ -90,7 +114,7 @@ function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
         </div>
       </FormControl> */}
       <Container maxWidth={isSmallScreen ? "xs" : "md"}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           {/* <Select value={selectedCountry} onChange={handleChange} name="code">
           <div class="search-field">
             <img
@@ -137,7 +161,6 @@ function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
               <Autocomplete
                 id="country-select-demo"
                 name="code"
-                onChange={handleChange}
                 onBlur={handleBlur}
                 sx={{ width: "100%" }}
                 options={isdCode}
@@ -169,17 +192,22 @@ function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
                   <TextField
                     {...params}
                     name="code"
-                    onChange={handleChange}
                     onBlur={handleBlur}
                     label="Country Code"
                     inputProps={{
                       ...params.inputProps, // disable autocomplete and autofill
                       autoComplete: "new-password",
                     }}
-                    // error={Boolean(errors.code)}
-                    // helperText={errors.code}
+                    error={Boolean(touched.code && errors.code)}
+                    helperText={touched.code && errors.code}
+                    onChange={(e, value) => {
+                      // Manually update Autocomplete value
+                      handleChange(e);
+                      handleAutocompleteChange(e, value);
+                    }}
                   />
                 )}
+                onChange={handleAutocompleteChange}
               />
             </Grid>
             <Grid item xs={4} sm={5} md={7}>
@@ -196,7 +224,7 @@ function EmailForm({ handleNext, activeStep, steps, setActiveStep }) {
             </Grid>
             <Grid item xs={4} sm={1} md={2}>
               <Button
-                onClick={buyNow}
+                type="submit"
                 class="button-75"
                 role="button"
                 sx={{ width: "100%", height: "100%" }}

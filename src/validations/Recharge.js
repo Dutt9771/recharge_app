@@ -6,7 +6,7 @@ const RechargeSchema = yup.object().shape({
     .string()
     .required("Mobile number is required")
     .matches(/^[0-9]+$/, "Must be only digits")
-    .min(10, "Must be at least 10 digits")
+    .min(7, "Must be at least 7 digits")
     .max(15, "Must be at most 15 digits"),
 });
 
