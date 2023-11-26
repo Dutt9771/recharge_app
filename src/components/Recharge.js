@@ -18,6 +18,7 @@ import CoupenCode from "./CoupenCode";
 import CouponCode from "./CoupenCode";
 import EmailForm from "./EmailForm";
 import PaymentOption from "./PaymentOption";
+import Header from "./Header";
 const steps = ["Coupon Code", "Email/User ID", "Payment option"];
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
@@ -98,51 +99,56 @@ function Recharge() {
     // setSkipped(newSkipped);
   };
   return (
-    <div>
-      <Stepper
-        alternativeLabel
-        connector={<ColorlibConnector />}
-        activeStep={activeStep}
-      >
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep == 0 && (
-        <CouponCode
-          handleNext={handleNext}
+    <>
+      <Header />
+      <div style={{ marginTop: "30px" }}>
+        <Stepper
+          alternativeLabel
+          connector={<ColorlibConnector />}
           activeStep={activeStep}
-          steps={steps}
-        />
-      )}
-      {activeStep == 1 && (
-        <EmailForm
-          handleNext={handleNext}
-          activeStep={activeStep}
-          steps={steps}
-        />
-      )}
-      {activeStep == 2 && (
-        <PaymentOption
-          handleNext={handleNext}
-          activeStep={activeStep}
-          steps={steps}
-        />
-      )}
-      {activeStep === steps.length && (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            {/* <Button onClick={handleReset}>Reset</Button> */}
-          </Box>
-        </React.Fragment>
-      )}
-    </div>
+        >
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel StepIconComponent={ColorlibStepIcon}>
+                {label}
+              </StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        {activeStep == 0 && (
+          <CouponCode
+            handleNext={handleNext}
+            activeStep={activeStep}
+            steps={steps}
+          />
+        )}
+        {activeStep == 1 && (
+          <EmailForm
+            handleNext={handleNext}
+            activeStep={activeStep}
+            steps={steps}
+          />
+        )}
+        {activeStep == 2 && (
+          <PaymentOption
+            handleNext={handleNext}
+            activeStep={activeStep}
+            steps={steps}
+          />
+        )}
+        {activeStep === steps.length && (
+          <React.Fragment>
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              All steps completed - you&apos;re finished
+            </Typography>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ flex: "1 1 auto" }} />
+              {/* <Button onClick={handleReset}>Reset</Button> */}
+            </Box>
+          </React.Fragment>
+        )}
+      </div>
+    </>
   );
 }
 

@@ -1,0 +1,64 @@
+/* Search Field with Icon */
+.code-field {
+  position: relative;
+  margin-bottom: 15px;
+}
+.code-img {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  line-height: 40px;
+  cursor: pointer;
+  z-index: 1;
+  /* color: #03045fc7; */
+  left: 7px;
+  width: 20px;
+  height: 20px;
+}
+
+.code-input {
+  border-radius: 2px;
+  /* border: 1px solid #ccc; */
+  height: 50px;
+  padding: 5px;
+  width: 420px;
+  padding-left: 30px !important;
+}
+
+/* code css1 */
+/* CountryFlagInput.css */
+
+.country-flag-input {
+  display: flex;
+  align-items: center;
+  width: 300px; /* Adjust the width as needed */
+}
+
+.flag-container {
+  margin-right: 10px;
+}
+
+.flag-container img {
+  width: 30px;
+  height: 20px;
+  object-fit: cover;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+}
+
+.isd-code {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+input {
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
