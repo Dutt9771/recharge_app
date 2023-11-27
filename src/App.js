@@ -3,7 +3,8 @@ import "./App.css";
 import ThemeConfig from "./theme";
 import GlobalStyles from "./theme/globalStyles";
 import Router from "./routes";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <ThemeConfig>
@@ -28,11 +29,11 @@ function App() {
         <Router />
         {/* </NiceModal.Provider> */}
       </ConfirmProvider>
-      {/* <ToastContainer
+      <ToastContainer
         position="top-right"
         autoClose={5000}
-        hideProgressBar
-        newestOnTop={false}
+        hideProgressBar={false}
+        newestOnTop={true}
         closeOnClick
         theme="colored"
         rtl={false}
@@ -40,7 +41,7 @@ function App() {
         draggable
         pauseOnHover
         limit={3}
-      /> */}
+      />
     </ThemeConfig>
   );
 }

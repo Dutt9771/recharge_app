@@ -92,9 +92,13 @@ function Recharge() {
   const [mobileNumber, setMobileNumber] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const steps = [
-    `Coupon Code${couponCode ? " ( ₹" + couponCode + ")" : ""}`,
+    `Coupon Code${
+      couponCode?.data?.price ? " ( ₹" + couponCode?.data?.price + ")" : ""
+    }`,
     `Mobile Number${mobileNumber ? " (" + mobileNumber + ")" : ""}`,
-    `Payment${couponCode ? " ( ₹" + couponCode + ")" : ""}`,
+    `Payment${
+      couponCode?.data?.price ? " ( ₹" + couponCode?.data?.price + ")" : ""
+    }`,
   ];
   const handleNext = () => {
     // let newSkipped = skipped;

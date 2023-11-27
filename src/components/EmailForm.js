@@ -20,6 +20,7 @@ import { CountryCodes } from "../CountryCodes";
 import { Flag } from "@mui/icons-material";
 import RechargeSchema from "../validations/Recharge";
 import { toast } from "react-toastify";
+import ImageLoader from "./ImageLoader";
 
 function EmailForm({
   handleNext,
@@ -58,6 +59,8 @@ function EmailForm({
     },
     validationSchema: RechargeSchema,
     onSubmit: (values) => {
+      console.log("values: ", values);
+      console.log("errors: ", errors);
       setLoading(true);
       const options = {
         method: "POST",
@@ -97,17 +100,26 @@ function EmailForm({
               JSON.stringify(response?.data?.authToken)
             );
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            toast.success(
+              response?.message ? response?.message : "Something Went Wrong"
+            );
             setLoading(false);
           } else {
-            // toast.error()
+            toast.error(
+              response?.message ? response?.message : "Something Went Wrong"
+            );
+            setLoading(false);
           }
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          toast.error(err?.message ? err?.message : "Something Went Wrong");
+          setLoading(false);
+        });
     },
   });
   const handleAutocompleteChange = (_, value) => {
     // Manually set the Formik form state
-    setFieldValue("code", value ? value.dial_code : "");
+    setFieldValue("code", value?.dial_code ? value?.dial_code : "");
   };
 
   return (
@@ -176,11 +188,11 @@ function EmailForm({
             <Grid item xs={4} sm={2} md={3}>
               <Autocomplete
                 id="country-select-demo"
-                name="code"
                 onBlur={handleBlur}
                 sx={{ width: "100%" }}
                 options={isdCode}
                 autoHighlight
+                disabled={loading}
                 getOptionLabel={(option) => option.dial_code}
                 renderOption={(props, option) => (
                   <Box
@@ -190,7 +202,7 @@ function EmailForm({
                   >
                     <div style={{ display: "flex" }}>
                       {/* <Flag className="country-flag" countryCode={country.flag} svg /> */}
-                      <img
+                      <ImageLoader
                         alt="United States"
                         src={
                           "http://purecatamphetamine.github.io/country-flag-icons/3x2/" +
@@ -198,6 +210,7 @@ function EmailForm({
                           ".svg"
                         }
                         style={{ width: "35px", marginRight: "15px" }}
+                        progressbar_size={10}
                       />
                       {/* {`${option.name} (${option.dial_code})`} */}
                       {`(${option.dial_code})`}
@@ -216,6 +229,7 @@ function EmailForm({
                     }}
                     error={Boolean(touched.code && errors.code)}
                     helperText={touched.code && errors.code}
+                    disabled={loading}
                     onChange={(e, value) => {
                       // Manually update Autocomplete value
                       handleChange(e);
@@ -236,13 +250,13 @@ function EmailForm({
                 sx={{ width: "100%" }}
                 error={Boolean(errors.mobileNumber && touched.mobileNumber)}
                 helperText={touched.mobileNumber && errors.mobileNumber}
+                disabled={loading}
               />
             </Grid>
             <Grid item xs={4} sm={1} md={2}>
-              <Button
+              <button
                 type="submit"
                 class="button-buy-now"
-                role="button"
                 sx={{ width: "100%", height: "100%" }}
               >
                 {!loading ? "Buy Now" : ""}
@@ -251,7 +265,7 @@ function EmailForm({
                 ) : (
                   ""
                 )}
-              </Button>
+              </button>
             </Grid>
           </Grid>
         </form>

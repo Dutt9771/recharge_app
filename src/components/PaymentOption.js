@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Card, CircularProgress, Typography } from "@mui/material";
 import "./PaymentOption.css";
 import { LoadingButton } from "@mui/lab";
+import ImageLoader from "./ImageLoader";
+import { toast } from "react-toastify";
 function PaymentOption({
   handleNext,
   activeStep,
@@ -38,10 +40,11 @@ function PaymentOption({
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "*",
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         transactionId: generateRandomText(),
-        amount: couponCode ? couponCode * 100 : 0,
+        amount: couponCode?.data?.price ? couponCode?.data?.price * 100 : 0,
         // amount: 100,
       }),
     };
@@ -63,12 +66,15 @@ function PaymentOption({
             JSON.stringify(response?.message?.data?.merchantId)
           );
           setLoading(false);
-          window.open(
-            response?.message?.data?.instrumentResponse?.redirectInfo?.url
-          );
+          // window.open(
+          //   response?.message?.data?.instrumentResponse?.redirectInfo?.url
+          // );
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        toast.error(err?.message ? err?.message : "Something Went Wrong");
+        setLoading(false);
+      });
     // setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -84,7 +90,7 @@ function PaymentOption({
             backgroundColor: "#5f259e",
           }}
         >
-          <img
+          <ImageLoader
             src="/assets/images/phonepay.jpg"
             alt=""
             style={{
@@ -92,6 +98,7 @@ function PaymentOption({
               marginLeft: "auto",
               marginRight: "auto",
             }}
+            progressbar_style={{ left: "36%", top: "20%", color: "white" }}
           />
           <Typography
             sx={{ mt: 2, mb: 1 }}
@@ -111,10 +118,10 @@ function PaymentOption({
               color: "white",
               marginTop: "15px",
               marginBottom: "15px",
-              fontSize:"18px"
+              fontSize: "18px",
             }}
           >
-            {couponCode ? "₹ " + couponCode : ""}
+            {couponCode?.data?.price ? "₹ " + couponCode?.data?.price : ""}
           </Typography>
           <Button
             onClick={Pay}
