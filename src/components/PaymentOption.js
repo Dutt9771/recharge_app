@@ -26,10 +26,26 @@ function PaymentOption({
   }
 
   useEffect(() => {
-    setTransactionId(JSON.parse(localStorage.getItem("td")) ? JSON.parse(localStorage.getItem("td")) : "");
-    setAmount(JSON.parse(localStorage.getItem("am")) ? JSON.parse(localStorage.getItem("am")) : 0);
-    setAuthToken(JSON.parse(localStorage.getItem("at")) ? JSON.parse(localStorage.getItem("at")) : "");
-    setRestricted(JSON.parse(localStorage.getItem("rt")) ? JSON.parse(localStorage.getItem("rt")) : false);
+    setTransactionId(
+      JSON.parse(localStorage.getItem("td"))
+        ? JSON.parse(localStorage.getItem("td"))
+        : ""
+    );
+    setAmount(
+      JSON.parse(localStorage.getItem("am"))
+        ? JSON.parse(localStorage.getItem("am"))
+        : 0
+    );
+    setAuthToken(
+      JSON.parse(localStorage.getItem("at"))
+        ? JSON.parse(localStorage.getItem("at"))
+        : ""
+    );
+    setRestricted(
+      JSON.parse(localStorage.getItem("rt"))
+        ? JSON.parse(localStorage.getItem("rt"))
+        : false
+    );
   }, []);
   const Pay = () => {
     setLoading(true);
