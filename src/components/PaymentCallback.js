@@ -1,12 +1,28 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function PaymentCallback() {
   const [transactionId, setTransactionId] = useState("");
   const [merchantId, setMerchantId] = useState("");
+  const [transaction, setTransaction] = useState("");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  // Accessing individual query parameters
+  const transaction_queryparams = queryParams.get("transaction");
   useEffect(() => {
-    setMerchantId(JSON.parse(localStorage.getItem("mi")));
-    setTransactionId(JSON.parse(localStorage.getItem("td")));
+    setTransaction(transaction_queryparams);
+    const merchantIdData = localStorage.getItem("mi") || "";
+    const mi = merchantIdData ? JSON.parse(merchantIdData) : "";
+    if (mi) {
+      setMerchantId(mi);
+    }
+    const transactionId = localStorage.getItem("td");
+    const td = transactionId ? JSON.parse(transactionId) : "";
+    if (td) {
+      setTransactionId(td);
+    }
     const options = {
       method: "POST",
       headers: {
@@ -59,12 +75,12 @@ function PaymentCallback() {
     // setActiveStep((prevActiveStep) => prevActiveStep + 1
   }, []);
 
-  return <div>Payment CallBack</div>;
+  return <div>Payment CallBack {transaction}</div>;
 }
 
 const componentConfig = {
   component: PaymentCallback,
-  path: "/payment/callback",
+  path: "/recharge/payment/callback",
   // public: false,
   //   layout: DashboardLayout,
   // roles: ["admin"],

@@ -26,10 +26,10 @@ function PaymentOption({
   }
 
   useEffect(() => {
-    setTransactionId(JSON.parse(localStorage.getItem("td")));
-    setAmount(JSON.parse(localStorage.getItem("am")));
-    setAuthToken(JSON.parse(localStorage.getItem("at")));
-    setRestricted(JSON.parse(localStorage.getItem("rt")));
+    setTransactionId(JSON.parse(localStorage.getItem("td")) ? JSON.parse(localStorage.getItem("td")) : "");
+    setAmount(JSON.parse(localStorage.getItem("am")) ? JSON.parse(localStorage.getItem("am")) : 0);
+    setAuthToken(JSON.parse(localStorage.getItem("at")) ? JSON.parse(localStorage.getItem("at")) : "");
+    setRestricted(JSON.parse(localStorage.getItem("rt")) ? JSON.parse(localStorage.getItem("rt")) : false);
   }, []);
   const Pay = () => {
     setLoading(true);
@@ -43,7 +43,7 @@ function PaymentOption({
         Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
-        transactionId: generateRandomText(),
+        // transactionId: generateRandomText(),
         amount: couponCode?.data?.price ? couponCode?.data?.price * 100 : 0,
         // amount: 100,
       }),
@@ -66,8 +66,10 @@ function PaymentOption({
             JSON.stringify(response?.message?.data?.merchantId)
           );
           setLoading(false);
+          window.location.href =
+            response?.data?.instrumentResponse?.redirectInfo?.url;
           // window.open(
-          //   response?.message?.data?.instrumentResponse?.redirectInfo?.url
+          //   response?.data?.instrumentResponse?.redirectInfo?.url
           // );
         }
       })
