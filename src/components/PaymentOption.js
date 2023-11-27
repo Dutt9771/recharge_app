@@ -59,11 +59,11 @@ function PaymentOption({
         if (response) {
           localStorage.setItem(
             "td",
-            JSON.stringify(response?.message?.data?.merchantId)
+            JSON.stringify(response?.data?.merchantId)
           );
           localStorage.setItem(
             "mi",
-            JSON.stringify(response?.message?.data?.merchantId)
+            JSON.stringify(response?.data?.merchantId)
           );
           setLoading(false);
           window.location.href =
