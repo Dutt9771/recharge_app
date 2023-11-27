@@ -59,7 +59,7 @@ function PaymentOption({
         if (response) {
           localStorage.setItem(
             "td",
-            JSON.stringify(response?.data?.merchantId)
+            JSON.stringify(response?.data?.merchantTransactionId)
           );
           localStorage.setItem(
             "mi",
