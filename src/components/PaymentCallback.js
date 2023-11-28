@@ -86,7 +86,7 @@ function PaymentCallback() {
               console.log("response: ", response);
               if (response?.success) {
                 setPayment(response?.data);
-                toast.success(response?.message);
+                // toast.success(response?.message);
                 paymentStore(response?.data, 2);
               } else {
                 toast.error(
