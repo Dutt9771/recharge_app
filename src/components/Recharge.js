@@ -8,7 +8,7 @@ import {
   Typography,
   stepConnectorClasses,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
@@ -87,10 +87,11 @@ function ColorlibStepIcon(props) {
 }
 
 function Recharge() {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [couponCode, setCouponCode] = React.useState("");
-  const [mobileNumber, setMobileNumber] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [isAppliedId, setIsAppliedId] = useState("");
+  const [couponCode, setCouponCode] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [loading, setLoading] = useState(false);
   const steps = [
     `Coupon Code${
       couponCode?.data?.price ? " ( ₹" + couponCode?.data?.price + ")" : ""
@@ -110,6 +111,36 @@ function Recharge() {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     // setSkipped(newSkipped);
   };
+
+  const steeper = (label) => {
+    if (
+      label !=
+        `Payment${
+          couponCode?.data?.price ? " ( ₹" + couponCode?.data?.price + ")" : ""
+        }` &&
+      couponCode?.data?.price &&
+      activeStep < 2
+    ) {
+      const index = steps.findIndex((item) => item == label);
+      if (index >= 0) {
+        setActiveStep(index);
+      }
+    }
+  };
+  const getPointerCursor = (label) => {
+    if (
+      label !=
+        `Payment${
+          couponCode?.data?.price ? " ( ₹" + couponCode?.data?.price + ")" : ""
+        }` &&
+      couponCode?.data?.price &&
+      activeStep < 2
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   return (
     <>
       <Header />
@@ -120,8 +151,15 @@ function Recharge() {
           activeStep={activeStep}
         >
           {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel StepIconComponent={ColorlibStepIcon}>
+            <Step
+              key={label}
+              onClick={() => steeper(label)}
+              style={{ cursor: getPointerCursor(label) ? "pointer" : "" }}
+            >
+              <StepLabel
+                StepIconComponent={ColorlibStepIcon}
+                style={{ cursor: getPointerCursor(label) ? "pointer" : "" }}
+              >
                 {label}
               </StepLabel>
             </Step>
@@ -133,6 +171,9 @@ function Recharge() {
             setCouponCode={setCouponCode}
             activeStep={activeStep}
             steps={steps}
+            setActiveStep={setActiveStep}
+            isAppliedId={isAppliedId}
+            setIsAppliedId={setIsAppliedId}
           />
         )}
         {activeStep == 1 && (

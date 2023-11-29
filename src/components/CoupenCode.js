@@ -13,9 +13,17 @@ import "./CoupenCode.css";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ImageLoader from "./ImageLoader";
 import { toast } from "react-toastify";
-function CouponCode({ handleNext, activeStep, steps, setCouponCode }) {
+function CouponCode({
+  handleNext,
+  activeStep,
+  steps,
+  setCouponCode,
+  setActiveStep,
+  setIsAppliedId,
+  isAppliedId,
+}) {
   const [coupenCodeArr, setCoupenCodeArr] = useState([]);
-  const [isAppliedId, setIsAppliedId] = useState("");
+
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [pageLoading, setPageLoading] = React.useState(true);
 
@@ -36,10 +44,10 @@ function CouponCode({ handleNext, activeStep, steps, setCouponCode }) {
     )
       .then((response) => response.json())
       .then((response) => {
-        if(response?.success){
+        if (response?.success) {
           setCoupenCodeArr(response?.data?.length > 0 ? response?.data : []);
           setPageLoading(false);
-        }else{
+        } else {
           setCoupenCodeArr(response?.data?.length > 0 ? response?.data : []);
         }
       })
@@ -82,7 +90,7 @@ function CouponCode({ handleNext, activeStep, steps, setCouponCode }) {
   const apply = (item) => {
     setIsAppliedId(item?.id ? item?.id : "");
     setCouponCode(item ? item : "");
-    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   return (
@@ -161,7 +169,7 @@ function CouponCode({ handleNext, activeStep, steps, setCouponCode }) {
                 //   </Grid>
               ))}
           </div>
-          <Container maxWidth={isSmallScreen ? "xs" : "lg"}>
+          {/* <Container maxWidth={isSmallScreen ? "xs" : "lg"}>
             <Button
               onClick={handleNext}
               class="button-75"
@@ -177,7 +185,7 @@ function CouponCode({ handleNext, activeStep, steps, setCouponCode }) {
                 {activeStep === steps.length - 1 ? "Finish" : "Next"}
               </span>
             </Button>
-          </Container>
+          </Container> */}
         </>
       )}
       {/* </Grid> */}

@@ -59,69 +59,73 @@ function EmailForm({
     },
     validationSchema: RechargeSchema,
     onSubmit: (values) => {
-      console.log("values: ", values);
-      console.log("errors: ", errors);
-      setLoading(true);
-      const options = {
-        method: "POST",
-        headers: {
-          accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "*",
-          phoneNumber: values?.mobileNumber ? values?.mobileNumber : "",
-          isd_code: values?.code ? values?.code?.split("+")?.[1] : "",
-        },
-      };
+      if (!loading) {
+        console.log("values: ", values);
+        console.log("errors: ", errors);
+        setLoading(true);
+        const options = {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            phoneNumber: values?.mobileNumber ? values?.mobileNumber : "",
+            isd_code: values?.code ? values?.code?.split("+")?.[1] : "",
+          },
+        };
 
-      fetch(
-        "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/users/verify",
-        options
-      )
-        .then((response) => response.json())
-        .then((response) => {
-          if (response && response?.data && response?.success) {
-            setMobileNumber(
-              values.code && values?.mobileNumber
-                ? `${values?.code}${values?.mobileNumber}`
-                : ""
-            );
-            localStorage.setItem("td", JSON.stringify(response?.data?.id));
-            localStorage.setItem(
-              "rt",
-              JSON.stringify(response?.data?.data?.restricted)
-            );
-            localStorage.setItem(
-              "am",
-              JSON.stringify(response?.data?.data?.wallet?.amount)
-            );
-            localStorage.setItem(
-              "at",
-              JSON.stringify(response?.data?.authToken)
-            );
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            toast.success(
-              response?.message ? response?.message : "Something Went Wrong"
-            );
+        fetch(
+          "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/users/verify",
+          options
+        )
+          .then((response) => response.json())
+          .then((response) => {
+            if (response && response?.data && response?.success) {
+              setMobileNumber(
+                values.code && values?.mobileNumber
+                  ? `${values?.code}${values?.mobileNumber}`
+                  : ""
+              );
+              localStorage.setItem("td", JSON.stringify(response?.data?.id));
+              localStorage.setItem(
+                "rt",
+                JSON.stringify(response?.data?.data?.restricted)
+              );
+              localStorage.setItem(
+                "am",
+                JSON.stringify(response?.data?.data?.wallet?.amount)
+              );
+              localStorage.setItem(
+                "at",
+                JSON.stringify(response?.data?.authToken)
+              );
+              setActiveStep((prevActiveStep) => prevActiveStep + 1);
+              toast.success(
+                response?.message ? response?.message : "Something Went Wrong"
+              );
+              setLoading(false);
+            } else {
+              toast.error(
+                response?.message ? response?.message : "Something Went Wrong"
+              );
+              setLoading(false);
+            }
+          })
+          .catch((err) => {
+            toast.error(err?.message ? err?.message : "Something Went Wrong");
             setLoading(false);
-          } else {
-            toast.error(
-              response?.message ? response?.message : "Something Went Wrong"
-            );
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          toast.error(err?.message ? err?.message : "Something Went Wrong");
-          setLoading(false);
-        });
+          });
+      }
     },
   });
   const handleAutocompleteChange = (_, value) => {
     // Manually set the Formik form state
-    setFieldValue("code", value?.dial_code ? value?.dial_code : "");
+    setFieldValue("code", value?.phone ? `+${value?.phone}` : "");
   };
-
+  const back = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
   return (
     <div>
       {/* <FormControl fullWidth>
@@ -193,7 +197,7 @@ function EmailForm({
                 options={isdCode}
                 autoHighlight
                 disabled={loading}
-                getOptionLabel={(option) => option.dial_code}
+                getOptionLabel={(option) => `(${option.code}) +${option.phone}`}
                 renderOption={(props, option) => (
                   <Box
                     component="li"
@@ -213,7 +217,7 @@ function EmailForm({
                         progressbar_size={10}
                       />
                       {/* {`${option.name} (${option.dial_code})`} */}
-                      {`(${option.dial_code})`}
+                      {`(${option.code}) +${option.phone}`}
                     </div>
                   </Box>
                 )}
@@ -223,10 +227,10 @@ function EmailForm({
                     name="code"
                     onBlur={handleBlur}
                     label="Country Code"
-                    inputProps={{
-                      ...params.inputProps, // disable autocomplete and autofill
-                      autoComplete: "new-password",
-                    }}
+                    // inputProps={{
+                    //   ...params.inputProps, // disable autocomplete and autofill
+                    //   autoComplete: "new-password",
+                    // }}
                     error={Boolean(touched.code && errors.code)}
                     helperText={touched.code && errors.code}
                     disabled={loading}
@@ -253,11 +257,18 @@ function EmailForm({
                 disabled={loading}
               />
             </Grid>
-            <Grid item xs={4} sm={1} md={2}>
+            {isSmallScreen && (
+              <Grid item xs={2} sm={1} md={2}>
+                <button class="button-buy-now" onClick={back}>
+                  Back
+                </button>
+              </Grid>
+            )}
+            <Grid item xs={isSmallScreen ? 2 : 4} sm={1} md={2}>
               <button
                 type="submit"
                 class="button-buy-now"
-                sx={{ width: "100%", height: "100%" }}
+                style={{ marginLeft: isSmallScreen ? "auto" : "0px" }}
               >
                 {!loading ? "Buy Now" : ""}
                 {loading ? (
@@ -270,6 +281,19 @@ function EmailForm({
           </Grid>
         </form>
       </Container>
+      {!isSmallScreen && (
+        <Container maxWidth={isSmallScreen ? "xs" : "md"}>
+          <button
+            class="button-buy-now"
+            onClick={back}
+            style={{
+              marginTop: "100px",
+            }}
+          >
+            Back
+          </button>
+        </Container>
+      )}
     </div>
   );
 }
