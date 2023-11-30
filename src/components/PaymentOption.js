@@ -48,51 +48,53 @@ function PaymentOption({
     );
   }, []);
   const Pay = () => {
-    setLoading(true);
-    const options = {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        Authorization: `Bearer ${authToken}`,
-      },
-      body: JSON.stringify({
-        // transactionId: generateRandomText(),
-        amount: couponCode?.data?.price ? couponCode?.data?.price * 100 : 0,
-        // amount: 100,
-      }),
-    };
+    if (!loading) {
+      setLoading(true);
+      const options = {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          // transactionId: generateRandomText(),
+          amount: couponCode?.data?.price ? couponCode?.data?.price * 100 : 0,
+          // amount: 100,
+        }),
+      };
 
-    fetch(
-      "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/payment",
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        console.log("response: ", response);
-        if (response) {
-          localStorage.setItem(
-            "td",
-            JSON.stringify(response?.data?.merchantTransactionId)
-          );
-          localStorage.setItem(
-            "mi",
-            JSON.stringify(response?.data?.merchantId)
-          );
+      fetch(
+        "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/payment",
+        options
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          console.log("response: ", response);
+          if (response) {
+            localStorage.setItem(
+              "td",
+              JSON.stringify(response?.data?.merchantTransactionId)
+            );
+            localStorage.setItem(
+              "mi",
+              JSON.stringify(response?.data?.merchantId)
+            );
+            setLoading(false);
+            window.location.href =
+              response?.data?.instrumentResponse?.redirectInfo?.url;
+            // window.open(
+            //   response?.data?.instrumentResponse?.redirectInfo?.url
+            // );
+          }
+        })
+        .catch((err) => {
+          toast.error(err?.message ? err?.message : "Something Went Wrong");
           setLoading(false);
-          window.location.href =
-            response?.data?.instrumentResponse?.redirectInfo?.url;
-          // window.open(
-          //   response?.data?.instrumentResponse?.redirectInfo?.url
-          // );
-        }
-      })
-      .catch((err) => {
-        toast.error(err?.message ? err?.message : "Something Went Wrong");
-        setLoading(false);
-      });
+        });
+    }
     // setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 

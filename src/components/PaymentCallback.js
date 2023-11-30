@@ -9,6 +9,7 @@ function PaymentCallback() {
   const navigate = useNavigate();
   const [transactionId, setTransactionId] = useState("");
   const [payment, setPayment] = useState("");
+  const [isResponse, setIsResponse] = useState(false);
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [authToken, setAuthToken] = useState(
     JSON.parse(localStorage.getItem("at"))
@@ -20,20 +21,22 @@ function PaymentCallback() {
   const queryParams = new URLSearchParams(location.search);
   // Accessing individual query parameters
   useEffect(() => {
+      getStatus();
+      // const merchantIdData = localStorage.getItem("mi") || "";
+      // const mi = merchantIdData ? JSON.parse(merchantIdData) : "";
+      // if (mi) {
+      //   setMerchantId(mi);
+      // }
+      // const transactionId = localStorage.getItem("td");
+      // const td = transactionId ? JSON.parse(transactionId) : "";
+      // if (td) {
+      //   setTransactionId(td);
+      // }
+  }, []);
+  const getStatus = () => {
     const transaction_queryparams = queryParams.get("transaction");
     console.log("authToken: ", authToken);
     console.log("transaction_queryparams: ", transaction_queryparams);
-    // const merchantIdData = localStorage.getItem("mi") || "";
-    // const mi = merchantIdData ? JSON.parse(merchantIdData) : "";
-    // if (mi) {
-    //   setMerchantId(mi);
-    // }
-    // const transactionId = localStorage.getItem("td");
-    // const td = transactionId ? JSON.parse(transactionId) : "";
-    // if (td) {
-    //   setTransactionId(td);
-    // }
-
     const options = {
       method: "POST",
       headers: {
@@ -50,33 +53,6 @@ function PaymentCallback() {
         //   : "",
       }),
     };
-
-    fetch(
-      "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/status",
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        console.log("response: ", response);
-        if (response?.success) {
-          setPayment(response?.data);
-          const options = {
-            method: "POST",
-            headers: {
-              accept: "application/json",
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods": "*",
-              Authorization: `Bearer ${authToken}`,
-            },
-            body: JSON.stringify({
-              transactionId: transaction_queryparams,
-              // merchantId: JSON.parse(localStorage.getItem("mi"))
-              //   ? JSON.parse(localStorage.getItem("mi"))
-              //   : "",
-            }),
-          };
-
           fetch(
             "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/status",
             options
@@ -94,43 +70,10 @@ function PaymentCallback() {
                 );
               }
             })
-            .catch((err) =>
-              toast.error(err?.message ? err?.message : "Something Went Wrong")
-            );
-        } else {
-          toast.error(
-            response?.message ? response?.message : "Something Went Wrong"
-          );
+            .catch((err) => {
+              toast.error(err?.message ? err?.message : "Something Went Wrong");
+            });
         }
-      })
-      .catch((err) =>
-        toast.error(err?.message ? err?.message : "Something Went Wrong")
-      );
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/status",{
-    //       data:{
-    //         transactionId: JSON.parse(localStorage.getItem("td"))
-    //           ? JSON.parse(localStorage.getItem("td"))
-    //           : "",
-    //         merchantId: JSON.parse(localStorage.getItem("mi"))
-    //           ? JSON.parse(localStorage.getItem("mi"))
-    //           : "",
-    //       }}
-    //     );
-
-    //     // Handle the data from the response
-    //     console.log("Response data:", response.data);
-    //   } catch (error) {
-    //     // Handle errors
-    //     console.error("Error fetching data:", error.message);
-    //   }
-    // };
-    // fetchData();
-    // setActiveStep((prevActiveStep) => prevActiveStep + 1
-  }, []);
-
   const paymentStore = (response, status) => {
     const options = {
       method: "PUT",
@@ -157,7 +100,7 @@ function PaymentCallback() {
       .then((response) => response.json())
       .then((response) => {
         toast.success("Your Payment is Successfull");
-        navigate("/");
+        // navigate("/");
       })
       .catch((err) =>
         toast.error(err?.message ? err?.message : "Something Went Wrong")
