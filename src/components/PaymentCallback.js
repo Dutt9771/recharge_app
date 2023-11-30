@@ -100,7 +100,7 @@ function PaymentCallback() {
       .then((response) => response.json())
       .then((response) => {
         toast.success("Your Payment is Successfull");
-        // navigate("/");
+        navigate("/");
       })
       .catch((err) =>
         toast.error(err?.message ? err?.message : "Something Went Wrong")
