@@ -1,6 +1,7 @@
 //
 import Recharge from "../components/Recharge";
 import PaymentCallback from "../components/PaymentCallback";
+import Transactions from "../components/Transactions";
 // import Register from './Register';
 // import DashboardApp from "./DashboardApp";
 // import UserList from "./Users/UserList";
@@ -10,6 +11,7 @@ import PaymentCallback from "../components/PaymentCallback";
 const config = [
   Recharge,
   PaymentCallback,
+  Transactions,
   // Login,
   // DashboardApp,
   // UserList,

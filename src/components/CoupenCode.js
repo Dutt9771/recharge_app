@@ -90,6 +90,7 @@ function CouponCode({
   const apply = (item) => {
     setIsAppliedId(item?.id ? item?.id : "");
     setCouponCode(item ? item : "");
+    localStorage.setItem("cd", JSON.stringify(item));
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 

@@ -7,8 +7,12 @@ import { Card, Container, Typography, useMediaQuery } from "@mui/material";
 
 function PaymentCallback() {
   const navigate = useNavigate();
-  const [transactionId, setTransactionId] = useState("");
   const [payment, setPayment] = useState("");
+  const [coupen, setCoupenCode] = useState(
+    JSON.parse(localStorage.getItem("cd"))
+      ? JSON.parse(localStorage.getItem("cd"))
+      : ""
+  );
   const [isResponse, setIsResponse] = useState(false);
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [authToken, setAuthToken] = useState(
@@ -21,17 +25,17 @@ function PaymentCallback() {
   const queryParams = new URLSearchParams(location.search);
   // Accessing individual query parameters
   useEffect(() => {
-      getStatus();
-      // const merchantIdData = localStorage.getItem("mi") || "";
-      // const mi = merchantIdData ? JSON.parse(merchantIdData) : "";
-      // if (mi) {
-      //   setMerchantId(mi);
-      // }
-      // const transactionId = localStorage.getItem("td");
-      // const td = transactionId ? JSON.parse(transactionId) : "";
-      // if (td) {
-      //   setTransactionId(td);
-      // }
+    getStatus();
+    // const merchantIdData = localStorage.getItem("mi") || "";
+    // const mi = merchantIdData ? JSON.parse(merchantIdData) : "";
+    // if (mi) {
+    //   setMerchantId(mi);
+    // }
+    // const transactionId = localStorage.getItem("td");
+    // const td = transactionId ? JSON.parse(transactionId) : "";
+    // if (td) {
+    //   setTransactionId(td);
+    // }
   }, []);
   const getStatus = () => {
     const transaction_queryparams = queryParams.get("transaction");
@@ -53,27 +57,27 @@ function PaymentCallback() {
         //   : "",
       }),
     };
-          fetch(
-            "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/status",
-            options
-          )
-            .then((response) => response.json())
-            .then((response) => {
-              console.log("response: ", response);
-              if (response?.success) {
-                setPayment(response?.data);
-                // toast.success(response?.message);
-                paymentStore(response?.data, 2);
-              } else {
-                toast.error(
-                  response?.message ? response?.message : "Something Went Wrong"
-                );
-              }
-            })
-            .catch((err) => {
-              toast.error(err?.message ? err?.message : "Something Went Wrong");
-            });
+    fetch(
+      "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/status",
+      options
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        console.log("response: ", response);
+        if (response?.success) {
+          setPayment(response?.data);
+          // toast.success(response?.message);
+          paymentStore(response?.data, 2);
+        } else {
+          toast.error(
+            response?.message ? response?.message : "Something Went Wrong"
+          );
         }
+      })
+      .catch((err) => {
+        toast.error(err?.message ? err?.message : "Something Went Wrong");
+      });
+  };
   const paymentStore = (response, status) => {
     const options = {
       method: "PUT",
@@ -90,6 +94,8 @@ function PaymentCallback() {
           : "",
         // status:"success",
         status: 2,
+        phonepayStatus: "success",
+        walletamount: coupen?.data?.value ? coupen?.data?.value : 0,
       }),
     };
 
