@@ -50,6 +50,7 @@ function PaymentOption({
   const Pay = () => {
     if (!loading) {
       setLoading(true);
+      console.log("couponCode: ", couponCode);
       const options = {
         method: "POST",
         headers: {
@@ -62,6 +63,7 @@ function PaymentOption({
         body: JSON.stringify({
           // transactionId: generateRandomText(),
           amount: couponCode?.data?.price ? couponCode?.data?.price * 100 : 0,
+          coin: couponCode?.id ? couponCode?.id : "",
           // amount: 100,
         }),
       };
