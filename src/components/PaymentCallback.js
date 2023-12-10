@@ -39,8 +39,9 @@ function PaymentCallback() {
   }, []);
   const getStatus = () => {
     const transaction_queryparams = queryParams.get("transaction");
-    console.log("authToken: ", authToken);
-    console.log("transaction_queryparams: ", transaction_queryparams);
+    // console.log("authToken: ", authToken);
+    // console.log("transaction_queryparams: ", transaction_queryparams);
+
     const options = {
       method: "POST",
       headers: {
@@ -52,6 +53,7 @@ function PaymentCallback() {
       },
       body: JSON.stringify({
         transactionId: transaction_queryparams,
+
         // merchantId: JSON.parse(localStorage.getItem("mi"))
         //   ? JSON.parse(localStorage.getItem("mi"))
         //   : "",
@@ -63,7 +65,7 @@ function PaymentCallback() {
     )
       .then((response) => response.json())
       .then((response) => {
-        console.log("response: ", response);
+        // console.log("response: ", response);
         if (response?.success) {
           setPayment(response?.data);
           // toast.success(response?.message);
@@ -79,6 +81,10 @@ function PaymentCallback() {
       });
   };
   const paymentStore = (response, status) => {
+    const coupenCode = JSON.parse(
+      localStorage.getItem("cd") ? localStorage.getItem("cd") : ""
+    );
+    // console.log("coupenCode: ", coupenCode);
     const options = {
       method: "PUT",
       headers: {
@@ -95,7 +101,7 @@ function PaymentCallback() {
         // status:"success",
         status: 2,
         phonepayStatus: "success",
-        walletamount: coupen?.data?.value ? coupen?.data?.value : 0,
+        coin: coupenCode ? coupenCode : "",
       }),
     };
 

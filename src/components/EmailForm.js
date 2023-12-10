@@ -60,8 +60,8 @@ function EmailForm({
     validationSchema: RechargeSchema,
     onSubmit: (values) => {
       if (!loading) {
-        console.log("values: ", values);
-        console.log("errors: ", errors);
+        // console.log("values: ", values);
+        // console.log("errors: ", errors);
         setLoading(true);
         const options = {
           method: "POST",

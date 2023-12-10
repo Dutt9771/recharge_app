@@ -21,7 +21,7 @@ function PaymentOption({
   function generateRandomText() {
     const randomDigits = Math.floor(Math.random() * 1000000000); // Generate a random 9-digit number
     const randomText = `TX${randomDigits}`;
-    console.log("randomText: ", randomText);
+    // console.log("randomText: ", randomText);
     return randomText;
   }
 
@@ -50,7 +50,8 @@ function PaymentOption({
   const Pay = () => {
     if (!loading) {
       setLoading(true);
-      console.log("couponCode: ", couponCode);
+      // console.log("couponCode: ", couponCode);
+      localStorage.setItem("cd", JSON.stringify(couponCode?.id));
       const options = {
         method: "POST",
         headers: {
@@ -74,7 +75,7 @@ function PaymentOption({
       )
         .then((response) => response.json())
         .then((response) => {
-          console.log("response: ", response);
+          // console.log("response: ", response);
           if (response) {
             localStorage.setItem(
               "td",

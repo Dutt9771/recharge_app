@@ -40,7 +40,7 @@ function Calendar() {
 		dispatch(getCalendarData({ date: calendarMonth }));
 	}, [calendarMonth]);
 
-	 console.log("data",data)
+	//  console.log("data",data)
 	// useEffect(() => {
 	// 	let d = []
 	// 	data?.employeeCommitmentOver?.map((employee) => {

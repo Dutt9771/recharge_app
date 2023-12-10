@@ -549,7 +549,7 @@ function UserPermissions() {
 											</Grid>
 											{!isArrowDown?.[permissionModule.moduleName] ? (
 												<>
-												{console.log("ModuleName",permissionModule.moduleKey)}
+												{/* {console.log("ModuleName",permissionModule.moduleKey)} */}
 										{	permissionModule.moduleKey !== "inbox"	 && <Grid item xs={2}>
 														<FormGroup>
 															<FormControlLabel

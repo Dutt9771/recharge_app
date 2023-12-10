@@ -72,8 +72,8 @@ function Transactions() {
 //   }, []);
   const getStatus = () => {
     const transaction_queryparams = queryParams.get("transaction");
-    console.log("authToken: ", authToken);
-    console.log("transaction_queryparams: ", transaction_queryparams);
+    // console.log("authToken: ", authToken);
+    // console.log("transaction_queryparams: ", transaction_queryparams);
     const options = {
       method: "POST",
       headers: {
@@ -96,7 +96,7 @@ function Transactions() {
     )
       .then((response) => response.json())
       .then((response) => {
-        console.log("response: ", response);
+        // console.log("response: ", response);
         if (response?.success) {
           //   setPayment(response?.data);
           // toast.success(response?.message);
