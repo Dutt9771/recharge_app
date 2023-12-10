@@ -100,7 +100,7 @@ function PaymentCallback() {
           : "",
         // status:"success",
         status: 2,
-        phonepayStatus: "success",
+        phonepeStatus: "success",
         coin: coupenCode ? coupenCode : "",
       }),
     };
