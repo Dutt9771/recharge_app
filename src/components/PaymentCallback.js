@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "./Header";
 import { Card, Container, Typography, useMediaQuery } from "@mui/material";
+import { BaseUrl } from "../BaseUrl";
 
 function PaymentCallback() {
   const navigate = useNavigate();
@@ -59,10 +60,7 @@ function PaymentCallback() {
         //   : "",
       }),
     };
-    fetch(
-      "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/status",
-      options
-    )
+    fetch(`${BaseUrl}/api/status`, options)
       .then((response) => response.json())
       .then((response) => {
         // console.log("response: ", response);
@@ -105,13 +103,11 @@ function PaymentCallback() {
       }),
     };
 
-    fetch(
-      "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/transaction",
-      options
-    )
+    fetch(`${BaseUrl}/api/transaction`, options)
       .then((response) => response.json())
       .then((response) => {
         toast.success("Your Payment is Successfull");
+        localStorage.clear();
         navigate("/");
       })
       .catch((err) =>

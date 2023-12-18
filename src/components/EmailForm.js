@@ -21,6 +21,7 @@ import { Flag } from "@mui/icons-material";
 import RechargeSchema from "../validations/Recharge";
 import { toast } from "react-toastify";
 import ImageLoader from "./ImageLoader";
+import { BaseUrl } from "../BaseUrl";
 
 function EmailForm({
   handleNext,
@@ -75,10 +76,7 @@ function EmailForm({
           },
         };
 
-        fetch(
-          "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/users/verify",
-          options
-        )
+        fetch(`${BaseUrl}/users/verify`, options)
           .then((response) => response.json())
           .then((response) => {
             if (response && response?.data && response?.success) {

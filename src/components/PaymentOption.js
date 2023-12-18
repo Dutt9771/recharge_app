@@ -4,6 +4,7 @@ import "./PaymentOption.css";
 import { LoadingButton } from "@mui/lab";
 import ImageLoader from "./ImageLoader";
 import { toast } from "react-toastify";
+import { BaseUrl } from "../BaseUrl";
 function PaymentOption({
   handleNext,
   activeStep,
@@ -69,10 +70,7 @@ function PaymentOption({
         }),
       };
 
-      fetch(
-        "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/payment",
-        options
-      )
+      fetch(`${BaseUrl}/api/payment`, options)
         .then((response) => response.json())
         .then((response) => {
           // console.log("response: ", response);

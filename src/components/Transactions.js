@@ -10,6 +10,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import { BaseUrl } from "../BaseUrl";
 
 function Transactions() {
   const navigate = useNavigate();
@@ -67,9 +68,9 @@ function Transactions() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   // Accessing individual query parameters
-//   useEffect(() => {
-    //   getStatus();
-//   }, []);
+  //   useEffect(() => {
+  //   getStatus();
+  //   }, []);
   const getStatus = () => {
     const transaction_queryparams = queryParams.get("transaction");
     // console.log("authToken: ", authToken);
@@ -90,10 +91,7 @@ function Transactions() {
         //   : "",
       }),
     };
-    fetch(
-      "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/api/status",
-      options
-    )
+    fetch(`${BaseUrl}/api/status`, options)
       .then((response) => response.json())
       .then((response) => {
         // console.log("response: ", response);

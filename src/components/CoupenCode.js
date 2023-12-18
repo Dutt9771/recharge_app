@@ -13,6 +13,7 @@ import "./CoupenCode.css";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ImageLoader from "./ImageLoader";
 import { toast } from "react-toastify";
+import { BaseUrl } from "../BaseUrl";
 function CouponCode({
   handleNext,
   activeStep,
@@ -38,10 +39,7 @@ function CouponCode({
       },
     };
 
-    fetch(
-      "https://us-central1-influencer-ea69f.cloudfunctions.net/app/api/v1/coupons",
-      options
-    )
+    fetch(`${BaseUrl}/coupons`, options)
       .then((response) => response.json())
       .then((response) => {
         if (response?.success) {
