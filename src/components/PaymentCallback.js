@@ -9,6 +9,7 @@ import { BaseUrl } from "../BaseUrl";
 function PaymentCallback() {
   const navigate = useNavigate();
   const [payment, setPayment] = useState("");
+  const [phonePayCode, setPhonePayCode] = useState("");
   const [coupen, setCoupenCode] = useState(
     JSON.parse(localStorage.getItem("cd"))
       ? JSON.parse(localStorage.getItem("cd"))
@@ -66,6 +67,7 @@ function PaymentCallback() {
         // console.log("response: ", response);
         if (response?.success) {
           setPayment(response?.data);
+          setPhonePayCode(response?.code);
           // toast.success(response?.message);
           paymentStore(response?.data, 2);
         } else {
@@ -75,6 +77,7 @@ function PaymentCallback() {
         }
       })
       .catch((err) => {
+        setPhonePayCode(err?.code);
         toast.error(err?.message ? err?.message : "Something Went Wrong");
       });
   };
@@ -98,7 +101,7 @@ function PaymentCallback() {
           : "",
         // status:"success",
         status: 2,
-        phonepeStatus: "success",
+        phonepeStatus: phonePayCode ? phonePayCode : "",
         coin: coupenCode?.id ? coupenCode?.id : "",
       }),
     };
