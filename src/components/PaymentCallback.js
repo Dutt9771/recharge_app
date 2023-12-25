@@ -9,7 +9,6 @@ import { BaseUrl } from "../BaseUrl";
 function PaymentCallback() {
   const navigate = useNavigate();
   const [payment, setPayment] = useState("");
-  const [phonePayCode, setPhonePayCode] = useState("");
   const [coupen, setCoupenCode] = useState(
     JSON.parse(localStorage.getItem("cd"))
       ? JSON.parse(localStorage.getItem("cd"))
@@ -67,9 +66,8 @@ function PaymentCallback() {
         // console.log("response: ", response);
         if (response?.success) {
           setPayment(response?.data);
-          setPhonePayCode(response?.code);
           // toast.success(response?.message);
-          paymentStore(response?.data, 2);
+          paymentStore(response, 2);
         } else {
           toast.error(
             response?.message ? response?.message : "Something Went Wrong"
@@ -77,7 +75,6 @@ function PaymentCallback() {
         }
       })
       .catch((err) => {
-        setPhonePayCode(err?.code);
         toast.error(err?.message ? err?.message : "Something Went Wrong");
       });
   };
@@ -96,12 +93,12 @@ function PaymentCallback() {
         Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
-        transactionId: response?.merchantTransactionId
-          ? response?.merchantTransactionId
+        transactionId: response?.data?.merchantTransactionId
+          ? response?.data?.merchantTransactionId
           : "",
         // status:"success",
         status: 2,
-        phonepeStatus: phonePayCode ? phonePayCode : "",
+        phonepeStatus: response?.code ? response?.code : "",
         coin: coupenCode?.id ? coupenCode?.id : "",
       }),
     };
