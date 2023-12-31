@@ -3,12 +3,19 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "./Header";
-import { Card, Container, Typography, useMediaQuery } from "@mui/material";
+import {
+  Card,
+  CircularProgress,
+  Container,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { BaseUrl } from "../BaseUrl";
 
 function PaymentCallback() {
   const navigate = useNavigate();
   const [payment, setPayment] = useState("");
+  const [loading, setLoading] = useState(true);
   const [coupen, setCoupenCode] = useState(
     JSON.parse(localStorage.getItem("cd"))
       ? JSON.parse(localStorage.getItem("cd"))
@@ -66,16 +73,26 @@ function PaymentCallback() {
         // console.log("response: ", response);
         if (response?.success) {
           setPayment(response?.data);
+          setLoading(false);
           // toast.success(response?.message);
-          paymentStore(response, 2);
+          // paymentStore(response, 2);
+          setTimeout(() => {
+            navigate("/");
+          }, 5000);
         } else {
           toast.error(
             response?.message ? response?.message : "Something Went Wrong"
           );
+          setTimeout(() => {
+            navigate("/");
+          }, 5000);
         }
       })
       .catch((err) => {
         toast.error(err?.message ? err?.message : "Something Went Wrong");
+        setTimeout(() => {
+          navigate("/");
+        }, 5000);
       });
   };
   const paymentStore = (response, status) => {
@@ -117,42 +134,56 @@ function PaymentCallback() {
   return (
     <>
       <Header />
+
       <Container maxWidth={"xs"} style={{ marginTop: "15px" }}>
         <Card style={{ padding: "20px" }}>
-          <img
-            src="/assets/images/check.png"
-            alt=""
-            style={{
-              width: isSmallScreen ? "100px" : "150px",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          />
-          <Container maxWidth={"xs"} style={{ marginTop: "20px" }}>
-            {payment?.responseCode && (
-              <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
-                Payment : {payment?.responseCode ? payment?.responseCode : ""}
-              </Typography>
-            )}
-            {payment?.merchantId && (
-              <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
-                Merchant Id : {payment?.merchantId ? payment?.merchantId : ""}
-              </Typography>
-            )}
-            {payment?.merchantTransactionId && (
-              <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
-                TransactionId :{" "}
-                {payment?.merchantTransactionId
-                  ? payment?.merchantTransactionId
-                  : ""}
-              </Typography>
-            )}
-            {payment?.amount && (
-              <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
-                Amount : ₹{payment?.amount / 100 ? payment?.amount / 100 : ""}
-              </Typography>
-            )}
-          </Container>
+          {loading ? (
+            <CircularProgress
+              size={25}
+              style={{
+                color: "black",
+                display: "flex",
+                marginLeft: "auto",
+                marginRight: "auto",
+                // marginTop: "20px",
+              }}
+            />
+          ) : (
+            <Container maxWidth={"xs"} style={{ marginTop: "20px" }}>
+              {/* <img
+              src="/assets/images/check.png"
+              alt=""
+              style={{
+                width: isSmallScreen ? "100px" : "150px",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            /> */}
+              {payment?.responseCode && (
+                <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
+                  Payment : {payment?.responseCode ? payment?.responseCode : ""}
+                </Typography>
+              )}
+              {payment?.merchantId && (
+                <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
+                  Merchant Id : {payment?.merchantId ? payment?.merchantId : ""}
+                </Typography>
+              )}
+              {payment?.merchantTransactionId && (
+                <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
+                  TransactionId :{" "}
+                  {payment?.merchantTransactionId
+                    ? payment?.merchantTransactionId
+                    : ""}
+                </Typography>
+              )}
+              {payment?.amount && (
+                <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
+                  Amount : ₹{payment?.amount / 100 ? payment?.amount / 100 : ""}
+                </Typography>
+              )}
+            </Container>
+          )}
         </Card>
       </Container>
     </>
