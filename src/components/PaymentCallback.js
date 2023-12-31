@@ -78,6 +78,7 @@ function PaymentCallback() {
           // paymentStore(response, 2);
           setTimeout(() => {
             navigate("/");
+            localStorage.clear();
           }, 5000);
         } else {
           toast.error(
@@ -85,6 +86,7 @@ function PaymentCallback() {
           );
           setTimeout(() => {
             navigate("/");
+            localStorage.clear();
           }, 5000);
         }
       })
@@ -92,6 +94,7 @@ function PaymentCallback() {
         toast.error(err?.message ? err?.message : "Something Went Wrong");
         setTimeout(() => {
           navigate("/");
+          localStorage.clear();
         }, 5000);
       });
   };
