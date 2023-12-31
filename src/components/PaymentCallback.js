@@ -153,15 +153,17 @@ function PaymentCallback() {
             />
           ) : (
             <Container maxWidth={"xs"} style={{ marginTop: "20px" }}>
-              {/* <img
-              src="/assets/images/check.png"
-              alt=""
-              style={{
-                width: isSmallScreen ? "100px" : "150px",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            /> */}
+              {payment?.responseCode == "SUCCESS" && (
+                <img
+                  src="/assets/images/check.png"
+                  alt=""
+                  style={{
+                    width: isSmallScreen ? "100px" : "150px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                />
+              )}
               {payment?.responseCode && (
                 <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
                   Payment : {payment?.responseCode ? payment?.responseCode : ""}
