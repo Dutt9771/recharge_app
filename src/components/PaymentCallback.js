@@ -13,8 +13,10 @@ import {
 import { BaseUrl } from "../BaseUrl";
 
 function PaymentCallback() {
+  let apiCallCount = 0;
   const navigate = useNavigate();
   const [payment, setPayment] = useState("");
+  const [reCallApi, setReCallApi] = useState(false);
   const [loading, setLoading] = useState(true);
   const [coupen, setCoupenCode] = useState(
     JSON.parse(localStorage.getItem("cd"))
@@ -45,6 +47,18 @@ function PaymentCallback() {
     //   setTransactionId(td);
     // }
   }, []);
+
+  useEffect(() => {
+    if (reCallApi) {
+      setInterval(() => {
+        if (apiCallCount >= 0 && apiCallCount < 2) {
+          apiCallCount++;
+          getStatus();
+        }
+      }, 10000);
+    }
+  }, [reCallApi]);
+
   const getStatus = () => {
     const transaction_queryparams = queryParams.get("transaction");
     // console.log("authToken: ", authToken);
@@ -70,10 +84,11 @@ function PaymentCallback() {
     fetch(`${BaseUrl}/api/status`, options)
       .then((response) => response.json())
       .then((response) => {
-        // console.log("response: ", response);
-        if (response?.success) {
+        if (response?.success && response?.code == "PAYMENT_SUCCESS") {
           setPayment(response?.data);
+          setReCallApi(false);
           setLoading(false);
+          apiCallCount = -1;
           // toast.success(response?.message);
           // paymentStore(response, 2);
           setTimeout(() => {
@@ -81,13 +96,31 @@ function PaymentCallback() {
             localStorage.clear();
           }, 5000);
         } else {
-          toast.error(
-            response?.message ? response?.message : "Something Went Wrong"
-          );
-          setTimeout(() => {
+          if (
+            response?.message != "User is not authorized for this operation"
+          ) {
+            if (apiCallCount >= 2) {
+              apiCallCount = -1;
+              setReCallApi(false);
+              navigate("/");
+              localStorage.clear();
+            } else {
+              setReCallApi(true);
+            }
+          } else {
+            toast.error(
+              response?.message ? response?.message : "Something Went Wrong"
+            );
             navigate("/");
             localStorage.clear();
-          }, 5000);
+          }
+          // toast.error(
+          //   response?.message ? response?.message : "Something Went Wrong"
+          // );
+          // setTimeout(() => {
+          //   navigate("/");
+          //   localStorage.clear();
+          // }, 5000);
         }
       })
       .catch((err) => {
