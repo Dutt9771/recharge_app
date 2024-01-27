@@ -52,6 +52,7 @@ function PaymentCallback() {
     if (reCallApi) {
       setInterval(() => {
         if (apiCallCount >= 0 && apiCallCount < 2) {
+          setLoading(true);
           apiCallCount++;
           getStatus();
         }
@@ -84,7 +85,7 @@ function PaymentCallback() {
     fetch(`${BaseUrl}/api/status`, options)
       .then((response) => response.json())
       .then((response) => {
-        if (response?.success && response?.code == "PAYMENT_SUCCESS") {
+        if (!(response?.success && response?.code == "PAYMENT_SUCCESS")) {
           setPayment(response?.data);
           setReCallApi(false);
           setLoading(false);
@@ -101,10 +102,14 @@ function PaymentCallback() {
           ) {
             if (apiCallCount >= 2) {
               apiCallCount = -1;
+              setPayment(response?.data);
               setReCallApi(false);
+              setLoading(false);
               navigate("/");
               localStorage.clear();
             } else {
+              setPayment(response?.data);
+              setLoading(false);
               setReCallApi(true);
             }
           } else {
