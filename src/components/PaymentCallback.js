@@ -85,13 +85,12 @@ function PaymentCallback() {
     fetch(`${BaseUrl}/api/status`, options)
       .then((response) => response.json())
       .then((response) => {
-        console.log("response: ", response);
         if (response?.success && response?.code == "PAYMENT_SUCCESS") {
           setPayment(response);
           setReCallApi(false);
           setLoading(false);
           apiCallCount = -1;
-          // toast.success(response?.message);
+          toast.success(response?.message);
           // paymentStore(response, 2);
           setTimeout(() => {
             navigate("/");
@@ -106,12 +105,18 @@ function PaymentCallback() {
               setPayment(response);
               setReCallApi(false);
               setLoading(false);
+              toast.error(
+                response?.message ? response?.message : "Something Went Wrong"
+              );
               navigate("/");
               localStorage.clear();
             } else {
               setPayment(response);
               setLoading(false);
               setReCallApi(true);
+              toast.error(
+                response?.message ? response?.message : "Something Went Wrong"
+              );
             }
           } else {
             toast.error(
@@ -203,14 +208,14 @@ function PaymentCallback() {
                   }}
                 />
               )}
-              {payment?.data?.responseCode && (
+              {payment?.code && (
                 <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
                   Payment :{" "}
-                  {payment?.data?.responseCode
-                    ? payment?.data?.responseCode == "SUCCESS"
-                      ? "Success"
-                      : "Failed"
-                    : "-"}
+                  {payment?.code == "PAYMENT_SUCCESS"
+                    ? "Success"
+                    : payment?.code == "PAYMENT_PENDING"
+                    ? "Pending"
+                    : "Failed"}
                 </Typography>
               )}
               {payment?.data?.merchantId && (
