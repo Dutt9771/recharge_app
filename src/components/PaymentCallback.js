@@ -85,8 +85,9 @@ function PaymentCallback() {
     fetch(`${BaseUrl}/api/status`, options)
       .then((response) => response.json())
       .then((response) => {
-        if (!(response?.success && response?.code == "PAYMENT_SUCCESS")) {
-          setPayment(response?.data);
+        console.log("response: ", response);
+        if (response?.success && response?.code == "PAYMENT_SUCCESS") {
+          setPayment(response);
           setReCallApi(false);
           setLoading(false);
           apiCallCount = -1;
@@ -102,13 +103,13 @@ function PaymentCallback() {
           ) {
             if (apiCallCount >= 2) {
               apiCallCount = -1;
-              setPayment(response?.data);
+              setPayment(response);
               setReCallApi(false);
               setLoading(false);
               navigate("/");
               localStorage.clear();
             } else {
-              setPayment(response?.data);
+              setPayment(response);
               setLoading(false);
               setReCallApi(true);
             }
@@ -191,7 +192,7 @@ function PaymentCallback() {
             />
           ) : (
             <Container maxWidth={"xs"} style={{ marginTop: "20px" }}>
-              {payment?.responseCode == "SUCCESS" && (
+              {payment?.data?.responseCode == "SUCCESS" && (
                 <img
                   src="/assets/images/check.png"
                   alt=""
@@ -202,27 +203,36 @@ function PaymentCallback() {
                   }}
                 />
               )}
-              {payment?.responseCode && (
+              {payment?.data?.responseCode && (
                 <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
-                  Payment : {payment?.responseCode ? payment?.responseCode : ""}
+                  Payment :{" "}
+                  {payment?.data?.responseCode
+                    ? payment?.data?.responseCode == "SUCCESS"
+                      ? "Success"
+                      : "Failed"
+                    : "-"}
                 </Typography>
               )}
-              {payment?.merchantId && (
+              {payment?.data?.merchantId && (
                 <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
-                  Merchant Id : {payment?.merchantId ? payment?.merchantId : ""}
+                  Merchant Id :{" "}
+                  {payment?.data?.merchantId ? payment?.data?.merchantId : "-"}
                 </Typography>
               )}
-              {payment?.merchantTransactionId && (
+              {payment?.data?.merchantTransactionId && (
                 <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
                   TransactionId :{" "}
-                  {payment?.merchantTransactionId
-                    ? payment?.merchantTransactionId
-                    : ""}
+                  {payment?.data?.merchantTransactionId
+                    ? payment?.data?.merchantTransactionId
+                    : "-"}
                 </Typography>
               )}
-              {payment?.amount && (
+              {payment?.data?.amount && (
                 <Typography sx={{ mt: 2, mb: 1 }} style={{ textAlign: "left" }}>
-                  Amount : ₹{payment?.amount / 100 ? payment?.amount / 100 : ""}
+                  Amount : ₹
+                  {payment?.data?.amount / 100
+                    ? payment?.data?.amount / 100
+                    : "-"}
                 </Typography>
               )}
             </Container>
