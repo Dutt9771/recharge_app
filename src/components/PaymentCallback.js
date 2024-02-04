@@ -85,7 +85,10 @@ function PaymentCallback() {
     fetch(`${BaseUrl}/api/status`, options)
       .then((response) => response.json())
       .then((response) => {
-        if (response?.success && response?.code == "PAYMENT_SUCCESS") {
+        if (
+          response?.code == "PAYMENT_SUCCESS" ||
+          response?.code == "PAYMENT_FAILED"
+        ) {
           setPayment(response);
           setReCallApi(false);
           setLoading(false);
@@ -98,7 +101,8 @@ function PaymentCallback() {
           }, 5000);
         } else {
           if (
-            response?.message != "User is not authorized for this operation"
+            response?.message != "User is not authorized for this operation" &&
+            payment?.code == "PAYMENT_PENDING"
           ) {
             if (apiCallCount >= 2) {
               apiCallCount = -1;
@@ -197,9 +201,15 @@ function PaymentCallback() {
             />
           ) : (
             <Container maxWidth={"xs"} style={{ marginTop: "20px" }}>
-              {payment?.data?.responseCode == "SUCCESS" && (
+              {payment?.code && (
                 <img
-                  src="/assets/images/check.png"
+                  src={
+                    payment?.code == "PAYMENT_SUCCESS"
+                      ? "/assets/images/check.png"
+                      : payment?.code == "PAYMENT_PENDING"
+                      ? "/assets/images/pending.png"
+                      : "/assets/images/failed.png"
+                  }
                   alt=""
                   style={{
                     width: isSmallScreen ? "100px" : "150px",
