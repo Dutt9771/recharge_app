@@ -87,7 +87,7 @@ function PaymentCallback() {
       .then((response) => {
         if (
           response?.code == "PAYMENT_SUCCESS" ||
-          response?.code == "PAYMENT_FAILED"
+          response?.code == "PAYMENT_ERROR"
         ) {
           setPayment(response);
           setReCallApi(false);
