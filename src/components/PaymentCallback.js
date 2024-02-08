@@ -102,7 +102,7 @@ function PaymentCallback() {
         } else {
           if (
             response?.message != "User is not authorized for this operation" &&
-            payment?.code == "PAYMENT_PENDING"
+            response?.code == "PAYMENT_PENDING"
           ) {
             if (apiCallCount >= 2) {
               apiCallCount = -1;
